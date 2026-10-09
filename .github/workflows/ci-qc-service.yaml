@@ -1,4 +1,4 @@
-name: ci manufacturing service
+name: ci qc service
 on:
   workflow_dispatch
 jobs:
@@ -54,7 +54,7 @@ jobs:
       - name: build docker image
         id: image-build
         run: |
-          IMAGE=${{ steps.login-ecr.outputs.registry }}/manufacturing-service:${{ steps.fetch-tag.outputs.tag }}
+          IMAGE=${{ steps.login-ecr.outputs.registry }}/qc-service:${{ steps.fetch-tag.outputs.tag }}
           docker build -t $IMAGE .
           echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
 
@@ -113,12 +113,12 @@ jobs:
           git config user.email "maxpain62@gmail.com"
 
           export IMAGE_TAG=${{ steps.fetch-tag.outputs.tag }}
-          export CURRENT_IMAGE_TAG=$(grep "tag:" envs/dev/values-manufacturing-service.yaml | awk '{print $2}')
+          export CURRENT_IMAGE_TAG=$(grep "tag:" envs/dev/values-qc-service.yaml | awk '{print $2}')
 
           echo "new image tag: $IMAGE_TAG"
           echo "current image tag: $CURRENT_IMAGE_TAG"
 
-          sed -i "s/$CURRENT_IMAGE_TAG/$IMAGE_TAG/g" envs/dev/values-manufacturing-service.yaml
+          sed -i "s/$CURRENT_IMAGE_TAG/$IMAGE_TAG/g" envs/dev/values-qc-service.yaml
 
-          git add envs/dev/values-manufacturing-service.yaml
+          git add envs/dev/values-qc-service.yaml
           git push
